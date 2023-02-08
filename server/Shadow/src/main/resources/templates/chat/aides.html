@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<!--
+	Dimension by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Shadow | Controller</title>
+		<link rel="shortcut icon" href="/images/logo.ico">
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+		<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+	</head>
+	<body class="is-preload">
+			<div id="wrapper">
+				<header id="header">
+					<div style="text-align: left; background-color: black; position: relative; opacity: 0.7; padding: 40px; border-radius: 21px">
+						<a th:href="@{/}" style="position: absolute; right: 3%; top: 4%; font-size: 41px">X</a>
+						<h2 class="major">
+							<strong>Aides</strong>
+						</h2>
+
+						<blockquote>
+							这是你和你的电脑的私人信道，你的命令将被它按顺序一一执行，未执行的命<br>令将存储在消息队列中等待执行，当连接失败时最好清除消息队列以防误操作<br>
+						</blockquote>
+
+						<div id="message" style="word-wrap:break-word; white-space:normal;"></div><br>
+
+						<section>
+							<div class="fields">
+								<div class="field">
+									<label for="text">Communicate</label>
+									<textarea id="text" placeholder="Enter your message" rows="4"></textarea>
+								</div>
+							</div><br>
+							<ul class="actions">
+								<li><button onclick="commanding()" class="primary">Commanding</button></li>
+								<li><button onclick="clean()">Clean</button></li>
+							</ul>
+						</section>
+						<a href="#help">First Time? Get Some Help Here</a>
+					</div>
+				</header>
+
+
+				<div id="main">
+					<article id="help">
+						hahaha, nobody will help you
+					</article>
+				</div>
+
+
+				<!-- Footer -->
+				<footer id="footer">
+					<p class="copyright">&copy; Designed by: <a href="https://html5up.net/">HTML5 UP</a><br>Adapted by: <a href="https://github.com/Northboat">NorthBoat</a></p>
+				</footer>
+
+			</div>
+
+			<!-- BG -->
+			<img id="bg" style="opacity: 0.7;" src="/images/wrap.jpg" alt="#">
+
+			<!-- Scripts -->
+			<script src="/assets/js/jquery.min.js"></script>
+			<script src="/assets/js/browser.min.js"></script>
+			<script src="/assets/js/breakpoints.min.js"></script>
+			<script src="/assets/js/util.js"></script>
+			<script src="/assets/js/main.js"></script>
+
+			<script>
+				//将消息显示在网页上
+				function setMessageInnerHTML(name, msg) {
+					document.getElementById("message").innerHTML += "<strong>" + name + ":</strong><br>"
+					while(msg.length > 27){
+						document.getElementById('message').innerHTML += msg.substring(0, 27) + '<br/>';
+						msg = msg.substring(27);
+					}
+					document.getElementById('message').innerHTML += msg + '<br/><br/>';
+				}
+
+				// rabbitmq 单工通信
+				function commanding(){
+					let a = "Northboat";
+					let cmd = document.getElementById("text").value;
+					setMessageInnerHTML(a, cmd)
+					document.getElementById("text").value = ""
+					$.ajax({
+						url: "/commanding",
+						type: "post",
+						data: JSON.stringify({account:a, command:cmd}),
+						dataType: "json",
+						contentType: "application/json",
+						success: function (result){
+							setMessageInnerHTML("Shadow", result.d)
+						}
+					});
+				}
+
+				function clean(){
+					document.getElementById("message").innerHTML = ""
+				}
+			</script>
+	</body>
+</html>

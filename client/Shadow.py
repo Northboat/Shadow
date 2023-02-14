@@ -22,7 +22,10 @@
 
 import pika
 import redis
-import os
+# import os
+import subprocess
+import requests
+import urllib
 
 # redis 连接池
 # pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True)   # host是redis主机，需要redis服务端和客户端都起着 redis默认端口是6379
@@ -42,13 +45,35 @@ channelx.queue_declare(queue=name)
 def redis_format(str):
     return '\"' + str + '\"'
 
-def cmd(command):
-    result = ''
-    for line in os.popen(command[1:]).readlines():
-        line = line.strip()
-        line += ' '
-        result += line
-    return redis_format(result.strip())
+
+# def cmd(command):
+#     result = ''
+#     for line in os.popen(command[1:]).readlines():
+#         line = line.strip()
+#         line += ' '
+#         result += line
+#     return redis_format(result.strip())
+
+
+def subprocess_popen(statement):
+    p = subprocess.Popen(statement, shell=True, stdout=subprocess.PIPE)
+    while p.poll() is None:
+        if p.wait() != 0:
+            return redis_format("命令执行失败")
+        else:
+            result = ''
+            for line in p.stdout.readlines():
+                line = line.decode('utf-8').strip()
+                line += ' '
+                result += line
+            return redis_format(result.strip())
+
+
+def qingyunke(msg):
+    url = 'http://api.qingyunke.com/api.php?key=free&appid=0&msg={}'.format(urllib.parse.quote(msg))
+    html = requests.get(url)
+    return html.json()["content"]
+
 
 #消息处理函数，执行完成才说明接收完成，此时才可以接收下一条，串行
 def exec(v1,v2,v3,bodyx):
@@ -58,9 +83,9 @@ def exec(v1,v2,v3,bodyx):
 
     # 处理命令
     if command[0] == '/':
-        result = cmd(command)
+        result = subprocess_popen(command[1:])
     else:
-        result = redis_format(command)
+        result = redis_format(qingyunke(command))
 
     print("返回的结果为: " + result)
     # 返回结果

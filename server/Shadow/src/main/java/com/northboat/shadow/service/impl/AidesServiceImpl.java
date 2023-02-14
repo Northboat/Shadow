@@ -47,7 +47,7 @@ public class AidesServiceImpl implements AidesService {
         while(Objects.isNull(redisUtil.get(user.getName())) || redisUtil.get(user.getName()).equals("null")){
             long cur = System.currentTimeMillis();
             long used = (cur-begin) / 1000;
-            if(used > 4){
+            if(used > 9){
                 return "连接超时";
             }
         }

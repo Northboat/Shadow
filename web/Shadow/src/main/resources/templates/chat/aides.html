@@ -74,23 +74,19 @@
 				//将消息显示在网页上
 				function setMessageInnerHTML(name, msg) {
 					document.getElementById("message").innerHTML += "<strong>" + name + ":</strong><br>"
-					while(msg.length > 27){
-						document.getElementById('message').innerHTML += msg.substring(0, 27) + '<br/>';
-						msg = msg.substring(27);
-					}
 					document.getElementById('message').innerHTML += msg + '<br/><br/>';
 				}
 
 				// rabbitmq 单工通信
 				function commanding(){
-					let a = "Northboat";
-					let cmd = document.getElementById("text").value;
-					setMessageInnerHTML(a, cmd)
+					let a = sessionStorage.getItem("user").toString();
+					let c = document.getElementById("text").value;
+					setMessageInnerHTML(a, c)
 					document.getElementById("text").value = ""
 					$.ajax({
 						url: "/commanding",
 						type: "post",
-						data: JSON.stringify({account:a, command:cmd}),
+						data: JSON.stringify({account:a, command:c}),
 						dataType: "json",
 						contentType: "application/json",
 						success: function (result){

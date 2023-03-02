@@ -1,0 +1,88 @@
+
+2023-03-02 20:16:09
+收到的命令: /ls
+返回的处理: 17173.py Bilibili.py CMDTest.py Compile.py HelloSpider.py RabbitMQTest.py Redis.py shadow
+收到的命令: /pwd
+返回的处理: /home/northboat/Desktop/file/python/dev
+收到的命令: /uname -a
+返回的处理: Linux northboat-nhx0dbde 6.1.12-1-MANJARO #1 SMP PREEMPT_DYNAMIC Tue Feb 14 21:59:10 UTC 2023 x86_64 GNU/Linux
+收到的命令: /ps
+返回的处理: PID TTY          TIME CMD 10160 pts/0    00:00:00 bash 20893 pts/0    00:00:00 python 21096 pts/0    00:00:00 ps
+收到的命令: /java --version
+返回的处理: "命令执行失败"
+收到的命令: /python -V
+返回的处理: Python 3.10.9
+收到的命令: /pip -V
+返回的处理: pip 23.0 from /usr/lib/python3.10/site-packages/pip (python 3.10)
+
+2023-03-02 22:48:34
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 1
+返回的处理: no
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: hello
+返回的处理: {face:14}Hi~
+收到的命令: 还不睡？
+返回的处理: 我不会睡觉
+收到的命令: northboat
+返回的处理: 无聊！打几个实用点的字出来聊行不
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 132456
+返回的处理: no
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123465
+返回的处理: no
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: a
+返回的处理: 把话说详细点，发个“a”能说明什么
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes

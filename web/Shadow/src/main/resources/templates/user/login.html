@@ -18,7 +18,7 @@
 				<header id="header">
                 	<div style="text-align: left; background-color: black; position: relative; opacity: 0.7; padding: 40px; border-radius: 21px">
 						<a th:href="@{/}" style="position: absolute; right: 7%; top: 27px; font-size: 41px">X</a>
-						<h2 class="major">帐号管理</h2>
+						<h2 class="major"\>帐号管理</h2>
 
 						<section th:if="${#strings.isEmpty(user)}">
 							<blockquote>若未注册，请输入邮箱并获取验证码，我们将自动为你跳转到注册界面</blockquote>
@@ -35,9 +35,13 @@
 									<li><input type="submit" value="获取验证码" class="primary" /></li>
 								</ul>
 							</form>
+							<a th:href="@{/sign}">本地客户端已启动且已设置密码？密码登录</a>
 						</section>
-						<section th:if="${not #strings.isEmpty(login)} and ${login} ne 0">
-							<h3>你好 <strong th:text="${user}"></strong></h3><br>
+
+
+						<section style="width: 320px" th:if="${not #strings.isEmpty(login)} and ${login} ne 0">
+							<h3>你好</h3>
+							<strong id="user" th:text="${user}"></strong><br><br>
 							<ul class="actions">
 								<li><a th:href="@{/logout}">退出登录</a></li>
 							</ul>
@@ -63,5 +67,12 @@
 			<script src="/assets/js/breakpoints.min.js"></script>
 			<script src="/assets/js/util.js"></script>
 			<script src="/assets/js/main.js"></script>
+
+			<script>
+				let user = document.getElementById("user").innerText;
+				if(user != null){
+					sessionStorage.setItem("user", user.toString());
+				}
+			</script>
 	</body>
 </html>

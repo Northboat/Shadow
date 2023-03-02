@@ -35,6 +35,19 @@ public class MailUtil extends Thread {
         return new String(code);
     }
 
+
+    public String send(String to) throws org.springframework.mail.MailSendException{
+        String code = generateCode();
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+
+        message.setTo(to);
+        message.setSubject("Hello~");
+        message.setText("这是您的验证码：" + code);
+        javaMailSender.send(message);
+        return code;
+    }
+
     public String send(String to, String name) throws org.springframework.mail.MailSendException{
         String code = generateCode();
         SimpleMailMessage message = new SimpleMailMessage();

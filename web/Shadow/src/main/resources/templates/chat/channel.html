@@ -63,7 +63,7 @@
 
 				if('WebSocket' in window) {	//判断当前浏览器是否支持WebSocket
 					//改成你的地址http
-					websocket = new WebSocket("ws://192.168.246.185:8080/chat/channel");
+					websocket = new WebSocket("ws://127.0.0.0:8080/chat/channel");
 				} else {
 					alert('当前浏览器 Not support websocket')
 				}
@@ -98,10 +98,6 @@
 
 				//将消息显示在网页上
 				function setMessageInnerHTML(innerHTML) {
-					while(innerHTML.length > 29){
-						document.getElementById('message').innerHTML += innerHTML.substring(0, 29) + '<br/>';
-						innerHTML = innerHTML.substring(29);
-					}
 					document.getElementById('message').innerHTML += innerHTML + '<br/><br/>';
 				}
 

@@ -39,11 +39,11 @@ public class AidesServiceImpl implements AidesService {
         if(Objects.isNull(user)){
             return "请先注册";
         }
+        redisUtil.set(user.getName(), "null");
         if(!rabbitMQUtil.send(user.getName(), command)){
             return "消息发送失败";
         }
         long begin = System.currentTimeMillis();
-//        System.out.println(user.getName());
         while(Objects.isNull(redisUtil.get(user.getName())) || redisUtil.get(user.getName()).equals("null")){
             long cur = System.currentTimeMillis();
             long used = (cur-begin) / 1000;
@@ -54,5 +54,23 @@ public class AidesServiceImpl implements AidesService {
         String back = (String) redisUtil.get(user.getName());
         redisUtil.set(user.getName(), "null");
         return back;
+    }
+
+    @Override
+    public String login(String account, String password){
+        User user = StringUtil.containAt(account) ? userMapper.queryByEmail(account) : userMapper.queryByName(account);
+        redisUtil.set(user.getName(), "null");
+        if(!rabbitMQUtil.send(user.getName(), "/login " + password)){
+            return "fail";
+        }
+        long begin = System.currentTimeMillis();
+        while(Objects.isNull(redisUtil.get(user.getName())) || redisUtil.get(user.getName()).equals("null")){
+            long cur = System.currentTimeMillis();
+            long used = (cur-begin) / 1000;
+            if(used > 9){
+                return "timeout";
+            }
+        }
+        return (String) redisUtil.get(user.getName());
     }
 }

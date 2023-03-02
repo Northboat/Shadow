@@ -10,5 +10,6 @@ public interface UserService {
     public boolean nameValid(String name);
     public boolean logout(String user);
     public User getUser(String account);
+    public int login(String name);
 
 }

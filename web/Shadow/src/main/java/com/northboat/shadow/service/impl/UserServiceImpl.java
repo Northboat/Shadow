@@ -34,7 +34,11 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
+    @Override
+    public int login(String name){
+        userMapper.login(name);
+        return userMapper.queryByName(name).getOnline();
+    }
 
 
     @Override
@@ -44,20 +48,28 @@ public class UserServiceImpl implements UserService {
         if(Objects.isNull(user) && !StringUtil.containAt(account)){
             return 0;
         }
-        String email = Objects.isNull(user) ? account : user.getEmail();
-        String name = Objects.isNull(user) ? "" : user.getName();
-        int flag = Objects.isNull(user) ? 2 : 1;
+        if(Objects.isNull(user)){
+            String code;
+            try{
+                code = mailUtil.send(account);
+            }catch (Exception e) {
+                e.printStackTrace();
+                return -1;
+            }
+            redisUtil.set(account, code, 600);
+            return 1;
+        }
 
         String code;
         try{
-            code = mailUtil.send(email, name);
+            code = mailUtil.send(user.getEmail(), user.getName());
         }catch (Exception e) {
             e.printStackTrace();
             return -1;
         }
         // 存验证码用邮箱存
-        redisUtil.set(email, code, 600);
-        return flag;
+        redisUtil.set(user.getEmail(), code, 600);
+        return 2;
     }
 
     // 验证码验证
@@ -70,7 +82,7 @@ public class UserServiceImpl implements UserService {
             // 在线状态
             userMapper.login(name);
             redisUtil.del(user.getEmail());
-            return user.getOnline()+1;
+            return userMapper.queryByName(user.getName()).getOnline();
         }
         return -1;
     }

@@ -39,7 +39,7 @@ public class UserController {
     @RequestMapping("/signIn")
     public String singIn(HttpSession session, Model model,
                          @RequestParam("account") String account, @RequestParam("pwd") String pwd){
-        System.out.println("进来了");
+        //System.out.println("进来了");
         User user = userService.getUser(account);
         if(Objects.isNull(user)){
             model.addAttribute("msg", "用户不存在");
@@ -50,7 +50,7 @@ public class UserController {
             String back = aidesService.login(user.getName(), pwd);
             switch (back) {
                 case "yes" -> {
-                    System.out.println(account + "登录成功");
+                    //System.out.println(account + "登录成功");
                     int online = userService.login(user.getName());
                     // 登录成功
                     session.setAttribute("login", online);

@@ -86,3 +86,113 @@
 返回的处理: yes
 收到的命令: /login 123456
 返回的处理: yes
+
+2023-03-04 19:00:18
+
+2023-03-04 19:01:25
+
+2023-03-04 19:05:16
+
+2023-03-04 19:06:06
+
+2023-03-04 19:06:36
+收到的命令: /login 011026
+返回的处理: yes
+收到的命令: /ls
+返回的处理: 17173.py Bilibili.py CMDTest.py Compile.py HelloSpider.py RabbitMQTest.py Redis.py shadow
+收到的命令: /cache
+返回的处理: "命令执行失败"
+收到的命令: /cache
+返回的处理: "命令执行失败"
+收到的命令: /cache
+返回的处理: "命令执行失败"
+收到的命令: /ls
+返回的处理: 17173.py Bilibili.py CMDTest.py Compile.py HelloSpider.py RabbitMQTest.py Redis.py shadow
+收到的命令: /pwd
+返回的处理: /home/northboat/Desktop/file/python/dev
+
+2023-03-04 19:08:22
+
+2023-03-04 19:11:26
+
+2023-03-04 19:14:13
+收到的命令: /cache
+返回的处理: "命令执行失败"
+收到的命令: /cache
+返回的处理: "命令执行失败"
+收到的命令: /ls
+返回的处理: 17173.py Bilibili.py CMDTest.py Compile.py HelloSpider.py RabbitMQTest.py Redis.py shadow
+收到的命令: /cache
+返回的处理: "命令执行失败"
+收到的命令: dasfdsa
+返回的处理: 没什么话题聊了是吗
+收到的命令: /ls
+返回的处理: 17173.py Bilibili.py CMDTest.py Compile.py HelloSpider.py RabbitMQTest.py Redis.py shadow
+收到的命令: /ls
+返回的处理: 17173.py Bilibili.py CMDTest.py Compile.py HelloSpider.py RabbitMQTest.py Redis.py shadow
+
+2023-03-04 21:18:50
+
+2023-03-04 21:21:42
+
+2023-03-04 21:22:42
+
+2023-03-04 21:23:07
+
+2023-03-04 21:25:05
+
+2023-03-04 21:29:27
+
+2023-03-04 21:31:31
+
+2023-03-04 21:33:00
+
+2023-03-04 21:35:02
+
+2023-03-04 21:37:23
+
+2023-03-04 21:40:11
+
+2023-03-04 21:41:24
+
+2023-03-04 21:42:06
+
+2023-03-04 21:43:20
+
+2023-03-04 21:44:11
+
+2023-03-04 21:52:34
+
+2023-03-04 21:53:23
+
+2023-03-04 21:59:18
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 
+返回的处理: no
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /ls
+返回的处理: 17173.py  2023-03-04 21:13:50 shadow.log Bilibili.py CMDTest.py Compile.py HelloSpider.py RabbitMQTest.py Redis.py shadow
+收到的命令: /login 13456
+返回的处理: no
+收到的命令: /login 123456
+返回的处理: yes
+收到的命令: /ls
+返回的处理: 17173.py  2023-03-04 21:13:50 shadow.log Bilibili.py CMDTest.py Compile.py HelloSpider.py RabbitMQTest.py Redis.py shadow
+收到的命令: /login 123456
+返回的处理: yes
+
+2023-03-04 22:23:37

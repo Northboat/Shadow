@@ -36,7 +36,6 @@ public class ChatController {
         // 去除注释开启登录验证
         String account = (String) session.getAttribute("user");
         Integer login = (Integer) session.getAttribute("login");
-
         if(Objects.isNull(account) || login == 0){
             model.addAttribute("msg", "请先登录");
             return "user/login";

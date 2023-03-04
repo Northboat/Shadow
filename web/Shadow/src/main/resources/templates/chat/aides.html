@@ -24,7 +24,9 @@
 						</h2>
 
 						<blockquote>
-							这是你和你的电脑的私人信道，你的命令将被它按顺序一一执行，未执行的命<br>令将存储在消息队列中等待执行，当连接失败时最好清除消息队列以防误操作<br>
+							这是你的私人信道，你的发言将被按序处理，未及时执行的命令将在队列中等待，详情请查看
+							<a href="#help">Help</a>
+							<br>
 						</blockquote>
 
 						<div id="message" style="word-wrap:break-word; white-space:normal;"></div><br>
@@ -38,7 +40,7 @@
 							</div><br>
 							<ul class="actions">
 								<li><button onclick="commanding()" class="primary">Send</button></li>
-								<li><button onclick="clean()">Clean</button></li>
+								<li><button onclick="clean()">Clear</button></li>
 							</ul>
 						</section>
 						<a href="#help">First Time? Get Some Help Here</a>
@@ -48,7 +50,21 @@
 
 				<div id="main">
 					<article id="help">
-						hahaha, nobody will help you
+						<h2 class="major">
+							<strong>Help</strong>
+						</h2>
+						<p>
+							You can type "/cache" to get recent seven command and answer
+						</p>
+						<p>
+							With character '/', you can use the window as a small shell on your personal computer,
+							which can provide you any commands except blocking one, like vim or others
+						</p>
+						<p>
+							For the common use, it's a chat robot with gpt2 model, which can interact with you and
+							help solve some of your problems. Also, it's based on RL(Reinforcement Learning), which
+							means it can grow stronger with your communication
+						<p>
 					</article>
 				</div>
 

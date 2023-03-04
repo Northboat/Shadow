@@ -41,7 +41,7 @@
 
 						<section style="width: 320px" th:if="${not #strings.isEmpty(login)} and ${login} ne 0">
 							<h3>你好</h3>
-							<strong id="user" th:text="${user}"></strong><br><br>
+							<strong id="user" th:text="${user}"></strong><br><br><br><br>
 							<ul class="actions">
 								<li><a th:href="@{/logout}">退出登录</a></li>
 							</ul>

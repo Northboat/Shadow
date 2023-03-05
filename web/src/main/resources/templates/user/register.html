@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Shadow | Verify</title>
+		<title>Shadow | Register</title>
 		<link rel="shortcut icon" href="/images/logo.ico">
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -15,32 +15,35 @@
 	</head>
 	<body class="is-preload">
 			<div id="wrapper">
-                <header id="header">
-                	<div style="text-align: left; background-color: black; position: relative; opacity: 0.7; padding: 40px; border-radius: 21px">
-						<a th:href="@{/}" style="position: absolute; right: 7%; top: 6%; font-size: 41px">X</a>
-						<h2 class="major">验证</h2>
+				<header id="header">
+                	<div style="width: 540px; text-align: left; background-color: black; position: relative; opacity: 0.7; padding: 40px; border-radius: 21px">
+						<div style="width: 100%; height: 40px">
+							<a th:href="@{/}" style="position: absolute; right: 4.5%; top: 2%; font-size: 32px">X</a>
+						</div>
+						<h2 class="major">注册</h2>
 
 						<p th:text="${msg}"></p>
 
 						<section>
-							<form method="post" th:action="@{/verify}">
+							<form method="post" th:action="@{/register}">
 								<div class="fields">
-									<div class="field">
-										<p>请输入验证码，有效期10分钟</p>
+									<div class="field half">
+										<label>请输入验证码，有效期10分钟</label>
 										<input type="text" name="code" />
+									</div>
+									<div class="field half">
+										<label>请输入昵称</label>
+										<input type="text" name="name" placeholder="Northboat" />
 									</div>
 								</div>
 								<ul class="actions">
 									<li><input type="reset" value="重置" class="primary" /></li>
-									<li><input type="submit" value="登录" /></li>
+									<li><input type="submit" value="注册" /></li>
 								</ul>
 							</form>
 						</section>
 					</div>
 				</header>
-
-					
-
 				<!-- Footer -->
 				<footer id="footer">
 					<p class="copyright">&copy; Designed by: <a href="https://html5up.net/">HTML5 UP</a><br>Adapted by: <a href="https://github.com/Northboat">NorthBoat</a></p>

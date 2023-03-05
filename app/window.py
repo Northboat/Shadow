@@ -24,39 +24,80 @@ def read_conf():
                 pwd = content
         return [name, email, pwd]
 
-class Ui_Dialog(object):
+
+class Ui_Dialog_Main(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(400, 300)
 
         self.appBox = QtWidgets.QGroupBox(Dialog)
-        self.appBox.setGeometry(QtCore.QRect(0, 0, 391, 241))
+        self.appBox.setGeometry(QtCore.QRect(5, 7, 391, 241))
         self.appBox.setObjectName("appBox")
-        self.app_label = QtWidgets.QLabel(self.appBox)
-        self.app_label.setGeometry(QtCore.QRect(150, 20, 200, 27))
-        self.app_label.setObjectName("app_label")
+        self.appLabel = QtWidgets.QLabel(self.appBox)
+        self.appLabel.setGeometry(QtCore.QRect(117, 12, 200, 44))
+        self.appLabel.setObjectName("appLabel")
 
-        self.name_label = QtWidgets.QLabel(self.appBox)
-        self.name_label.setGeometry(QtCore.QRect(30, 70, 61, 21))
-        self.name_label.setObjectName("name_label")
+        self.textEdit = QtWidgets.QTextEdit(self.appBox)
+        self.textEdit.setGeometry(QtCore.QRect(40, 61, 311, 151))
+        self.textEdit.setObjectName("textEdit")
+
+        self.askBtn = QtWidgets.QPushButton(Dialog)
+        self.askBtn.setGeometry(QtCore.QRect(60, 257, 75, 23))
+        self.askBtn.setMaximumSize(QtCore.QSize(75, 16777215))
+        self.askBtn.setObjectName("ask")
+
+        self.closeBtn = QtWidgets.QPushButton(Dialog)
+        self.closeBtn.setGeometry(QtCore.QRect(270, 257, 75, 23))
+        self.closeBtn.setMaximumSize(QtCore.QSize(75, 16777215))
+        self.closeBtn.setObjectName("close")
+
+        self.retranslateUi(Dialog)
+        self.closeBtn.clicked.connect(Dialog.close)
+        self.askBtn.clicked.connect(Dialog.ask)
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
+    
+    def retranslateUi(self, Dialog):
+        _translate = QtCore.QCoreApplication.translate
+        Dialog.setWindowTitle(_translate("Dialog", "Shadow"))
+        self.appLabel.setText(_translate("Dialog", "Your Shadow is Running"))
+        self.closeBtn.setText(_translate("Dialog", "退出"))
+        self.askBtn.setText(_translate("Dialog", "询问"))
+
+
+
+class Ui_Dialog_Login(object):
+    def setupUi(self, Dialog):
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(400, 300)
+
+        self.appBox = QtWidgets.QGroupBox(Dialog)
+        self.appBox.setGeometry(QtCore.QRect(5, 7, 391, 241))
+        self.appBox.setObjectName("appBox")
+        self.appLabel = QtWidgets.QLabel(self.appBox)
+        self.appLabel.setGeometry(QtCore.QRect(150, 20, 200, 27))
+        self.appLabel.setObjectName("appLabel")
+
+        self.nameLabel = QtWidgets.QLabel(self.appBox)
+        self.nameLabel.setGeometry(QtCore.QRect(30, 70, 61, 21))
+        self.nameLabel.setObjectName("nameLabel")
 
         self.name = QtWidgets.QLineEdit(self.appBox)
         self.name.setGeometry(QtCore.QRect(100, 70, 200, 27))
         self.name.setObjectName("name")
 
 
-        self.email_label = QtWidgets.QLabel(self.appBox)
-        self.email_label.setGeometry(QtCore.QRect(30, 120, 61, 21))
-        self.email_label.setObjectName("email_label")
+        self.emailLabel = QtWidgets.QLabel(self.appBox)
+        self.emailLabel.setGeometry(QtCore.QRect(30, 120, 61, 21))
+        self.emailLabel.setObjectName("emailLabel")
 
         self.email = QtWidgets.QLineEdit(self.appBox)
         self.email.setGeometry(QtCore.QRect(100, 120, 200, 27))
         self.email.setObjectName("email")
 
 
-        self.pwd_label = QtWidgets.QLabel(self.appBox)
-        self.pwd_label.setGeometry(QtCore.QRect(30, 170, 61, 21))
-        self.pwd_label.setObjectName("pwd_label")
+        self.pwdLabel = QtWidgets.QLabel(self.appBox)
+        self.pwdLabel.setGeometry(QtCore.QRect(30, 170, 61, 21))
+        self.pwdLabel.setObjectName("pwd_label")
 
         self.pwd = QtWidgets.QLineEdit(self.appBox)
         self.pwd.setGeometry(QtCore.QRect(100, 170, 200, 27))
@@ -64,12 +105,12 @@ class Ui_Dialog(object):
 
 
         self.loginBtn = QtWidgets.QPushButton(Dialog)
-        self.loginBtn.setGeometry(QtCore.QRect(40, 250, 75, 23))
+        self.loginBtn.setGeometry(QtCore.QRect(60, 257, 75, 23))
         self.loginBtn.setMaximumSize(QtCore.QSize(75, 16777215))
         self.loginBtn.setObjectName("loginBtn")
 
         self.clearBtn = QtWidgets.QPushButton(Dialog)
-        self.clearBtn.setGeometry(QtCore.QRect(250, 250, 75, 23))
+        self.clearBtn.setGeometry(QtCore.QRect(270, 257, 75, 23))
         self.clearBtn.setMaximumSize(QtCore.QSize(75, 16777215))
         self.clearBtn.setObjectName("clearBtn")
         
@@ -82,11 +123,11 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Shadow"))
         # self.appBox.setTitle(_translate("Dialog", "Shadow 登陆器"))
-        self.app_label.setText(_translate("Dialog", "Shadow 登陆器"))
+        self.appLabel.setText(_translate("Dialog", "Shadow 登陆器"))
 
-        self.name_label.setText(_translate("Dialog", "昵称"))
-        self.email_label.setText(_translate("Dialog", "邮箱"))
-        self.pwd_label.setText(_translate("Dialog", "设置密码"))
+        self.nameLabel.setText(_translate("Dialog", "昵称"))
+        self.emailLabel.setText(_translate("Dialog", "邮箱"))
+        self.pwdLabel.setText(_translate("Dialog", "设置密码"))
 
         self.pwd.setEchoMode(QtWidgets.QLineEdit.Password)
         conf = read_conf()
@@ -97,4 +138,3 @@ class Ui_Dialog(object):
 
         self.loginBtn.setText(_translate("Dialog", "启动"))
         self.clearBtn.setText(_translate("Dialog", "清空"))
-

@@ -58,4 +58,18 @@ public class RabbitMQUtil {
             return false;
         }
     }
+
+    public boolean clear(String name){
+        try{
+            // 创捷连接
+            Connection connection = factory.newConnection();
+            // 创建一个信道
+            Channel channel = connection.createChannel();
+            channel.queuePurge(name);
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

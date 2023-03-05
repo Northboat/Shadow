@@ -3,16 +3,73 @@
 import sys
 import window
 from PyQt5.QtWidgets import QApplication, QDialog
+from PyQt5.QtGui import QIcon
+from PyQt5 import QtCore
 import pymysql
-import subprocess
+import threading
 
 
 path = "./shadow/"
 
+
+class Controller:
+    def __init__(self):
+        pass
+
+    def show_login(self):
+        self.login = LoginDialog()
+        self.login.switch_window.connect(self.show_main)
+        self.login.show()
+
+    def show_main(self):
+        self.login.close()
+        self.window = MainDialog()
+        self.window.switch_window.connect(self.shutdown)
+        self.window.show()
+        import shadow;
+        self.p = threading.Thread(target=shadow.shadow)
+        # 设置为守护进程，当父进程结束时，将被强制终止
+        self.p.daemon = True
+        self.p.start()
+
+    def shutdown(self):
+        print("-------- 结束接收数据 -----------")
+        sys.exit()
+
+
+
 class MainDialog(QDialog):
+
+    switch_window = QtCore.pyqtSignal()
+
     def __init__(self, parent=None):
         super(QDialog, self).__init__(parent)
-        self.ui = window.Ui_Dialog()
+        self.ui = window.Ui_Dialog_Main()
+        self.setWindowIcon(QIcon(path + "logo.ico"))
+        self.ui.setupUi(self)
+
+    # 传递信号，调用新一层函数
+    def close(self):
+        self.switch_window.emit()
+
+    def ask(self):
+        query = self.ui.textEdit.toPlainText().strip()
+        print("收到询问: " + query)
+        from shadow import chat
+        back = chat(query)
+        print("处理结果: " + back)
+        self.ui.textEdit.setText(back)
+
+
+
+class LoginDialog(QDialog):
+
+    switch_window = QtCore.pyqtSignal()
+
+    def __init__(self, parent=None):
+        super(QDialog, self).__init__(parent)
+        self.ui = window.Ui_Dialog_Login()
+        self.setWindowIcon(QIcon(path + "logo.ico"))
         self.ui.setupUi(self)
 
 
@@ -58,11 +115,8 @@ class MainDialog(QDialog):
         
         if self.verily(name, email):
             self.write_conf(name, email, pwd)
-            # 关闭登陆器
-            self.close()
-            # 开启监听器
-            import shadow
-            shadow.shadow()
+            # 跳转主页面
+            self.switch_window.emit()
 
 
     
@@ -72,8 +126,10 @@ class MainDialog(QDialog):
         self.ui.pwd.clear()
 
 
+
+
 if __name__ == '__main__':
     myapp = QApplication(sys.argv)
-    myDlg = MainDialog()
-    myDlg.show()
+    myDlg = Controller()
+    myDlg.show_login()
     sys.exit(myapp.exec_())

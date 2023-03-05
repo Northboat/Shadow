@@ -18,8 +18,10 @@
 			<div id="wrapper">
 				<header id="header">
 					<div style="text-align: left; background-color: black; position: relative; opacity: 0.7; padding: 40px; border-radius: 21px">
-						<a th:href="@{/}" style="position: absolute; right: 7%; top: 27px; font-size: 41px">X</a>
-						<h2 class="major">当前共有<strong th:text="${count}"></strong>人在熊熊的频道</h2>
+						<div style="width: 100%; height: 40px">
+							<a th:href="@{/}" style="position: absolute; right: 4.5%; top: 2%; font-size: 32px">X</a>
+						</div>
+						<h2 class="major"><strong th:text="${count}"></strong>人在线</h2>
 
 						<blockquote>
 						这是一个公共聊天室，你可以在这畅所欲言，分享你的船新玩法

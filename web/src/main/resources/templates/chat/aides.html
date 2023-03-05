@@ -18,7 +18,9 @@
 			<div id="wrapper">
 				<header id="header">
 					<div style="text-align: left; background-color: black; position: relative; opacity: 0.7; padding: 40px; border-radius: 21px">
-						<a th:href="@{/}" style="position: absolute; right: 3%; top: 4%; font-size: 41px">X</a>
+						<div style="width: 100%; height: 40px">
+							<a th:href="@{/}" style="position: absolute; right: 4.5%; top: 2%; font-size: 32px">X</a>
+						</div>
 						<h2 class="major">
 							<strong>Aides</strong>
 						</h2>
@@ -40,10 +42,10 @@
 							</div><br>
 							<ul class="actions">
 								<li><button onclick="commanding()" class="primary">Send</button></li>
-								<li><button onclick="clean()">Clear</button></li>
+								<li><button onclick="cls()">Clear</button></li>
 							</ul>
 						</section>
-						<a href="#help">First Time? Get Some Help Here</a>
+						<a onclick="clean()">Clean the Message Queue</a>
 					</div>
 				</header>
 
@@ -93,6 +95,11 @@
 					document.getElementById('message').innerHTML += msg + '<br/><br/>';
 				}
 
+				function cls(){
+					document.getElementById("message").innerHTML = ""
+				}
+
+
 				// rabbitmq 单工通信
 				function commanding(){
 					let a = sessionStorage.getItem("user").toString();
@@ -106,14 +113,27 @@
 						dataType: "json",
 						contentType: "application/json",
 						success: function (result){
-							setMessageInnerHTML("Shadow", result.d)
+							setMessageInnerHTML("Shadow", result.data)
 						}
 					});
 				}
 
 				function clean(){
-					document.getElementById("message").innerHTML = ""
+					let a = sessionStorage.getItem("user").toString();
+					setMessageInnerHTML(a, "清除消息队列")
+					$.ajax({
+						url: "/clean",
+						type: "post",
+						data: JSON.stringify({account:a}),
+						dataType: "json",
+						contentType: "application/json",
+						success: function (result){
+							setMessageInnerHTML("Shadow", result.data)
+						}
+					});
 				}
+
+
 			</script>
 	</body>
 </html>

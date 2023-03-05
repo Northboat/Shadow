@@ -73,4 +73,10 @@ public class AidesServiceImpl implements AidesService {
         }
         return (String) redisUtil.get(user.getName());
     }
+
+    @Override
+    public boolean clearMsg(String account){
+        User user = StringUtil.containAt(account) ? userMapper.queryByEmail(account) : userMapper.queryByName(account);
+        return rabbitMQUtil.clear(user.getName());
+    }
 }

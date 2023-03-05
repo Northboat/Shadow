@@ -11,7 +11,7 @@ import openai
 # redis 连接池
 pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True, max_connections=4)   # host是redis主机，需要redis服务端和客户端都起着 redis默认端口是6379
 # 获取队列名（从 .conf 中）
-path = "./shadow/"
+path = "./"
 name = ""
 email = ""
 pwd = ""
@@ -33,19 +33,51 @@ q = Queue(14)
 def redis_format(str):
     return '\"' + str + '\"'
 
+
+p = subprocess.Popen("/bin/bash", shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+def stdout():
+    global p
+    while True:
+        setback(p.stdout.readline().decode('utf8').strip() + " ")
+
+def stderr():
+    global p
+    while True:
+        setback(p.stderr.readline().decode('utf8').strip() + " ")
+
+cmd_back = ""
+
+def setback(str):
+    global cmd_back
+    global back_finished
+    cmd_back += str
+
+def getback():
+    global cmd_back
+    global back_finished
+    result = cmd_back
+    cmd_back = ""
+    return result.strip()
+
+import threading
+out = threading.Thread(target=stdout)
+out.daemon = True
+err = threading.Thread(target=stderr)
+err.daemon = True
+out.start()
+err.start()
+
+import os
+import time
 # 执行命令行
-def subprocess_popen(statement):
-    p = subprocess.Popen(statement, shell=True, stdout=subprocess.PIPE)
-    while p.poll() is None:
-        if p.wait() != 0:
-            return "命令执行失败"
-        else:
-            result = ''
-            for line in p.stdout.readlines():
-                line = line.decode('utf-8').strip()
-                line += ' '
-                result += line
-            return result.strip()
+def cmd(statement):
+    global p   
+    global back_finished
+    statement += os.linesep
+    p.stdin.write(statement.encode('utf8'))
+    p.stdin.flush()
+    time.sleep(1)
+    return getback()
 
 
 # 聊天机器人
@@ -55,7 +87,7 @@ def chat1(msg):
     return html.json()["content"]
 
 
-openai.api_key = "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"
+openai.api_key = "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"
 def chat(msg):
     messages = []
     messages.append({"role":"system","content":""})
@@ -98,8 +130,6 @@ def get_history():
 
 
 def login(p):
-    #print(pwd)
-    #print(p)
     if(pwd == p):
         return "yes"
     return "no"
@@ -126,7 +156,7 @@ def shadow():
             elif command[1:].split(" ")[0] == "login":
                 result = login(command[1:].split(" ")[1].strip())
             else:
-                result = subprocess_popen(command[1:])
+                result = cmd(command[1:])
         else:
             result = chat(command)
     

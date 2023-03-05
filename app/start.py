@@ -9,7 +9,7 @@ import pymysql
 import threading
 
 
-path = "./shadow/"
+path = "./"
 
 
 class Controller:

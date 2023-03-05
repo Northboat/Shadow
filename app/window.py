@@ -9,7 +9,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-path = "./shadow/"
+path = "./"
 def read_conf():
     with open(path+"shadow.conf", 'r') as f:
         for line in f.readlines():

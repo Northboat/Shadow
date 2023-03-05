@@ -6,7 +6,6 @@ import urllib
 from queue import Queue
 from datetime import datetime
 import openai
-import os
 
 
 # redis 连接池
@@ -50,24 +49,23 @@ def subprocess_popen(statement):
 
 
 # 聊天机器人
-def chat(msg):
+def chat1(msg):
     url = 'http://api.qingyunke.com/api.php?key=free&appid=0&msg={}'.format(urllib.parse.quote(msg))
     html = requests.get(url)
     return html.json()["content"]
 
 
-#openai.api_key = os.environ["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"]
-def chat1(msg):
-    response = openai.Completion.create(
-        engine="davinci",
-        prompt=msg,
-        max_tokens=2048,
-        n=1,
-        stop=None,
-        temperature=0.7,
+openai.api_key = "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"
+def chat(msg):
+    messages = []
+    messages.append({"role":"system","content":""})
+    messages.append({"role":"user","content": msg})
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages
     )
-    message = response.choices[0].text
-    return message
+    reply = response["choices"][0]["message"]["content"]
+    return reply
 
 
 # 通过 redis 回送消息

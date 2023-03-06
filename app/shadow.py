@@ -27,7 +27,7 @@ with open(path+"shadow.conf", 'r') as f:
         elif tag == "password":
             pwd = content
 
-# 命令日志缓存队列，最多可存 6 条交互
+# 命令日志缓存队列，最多可存 7 条交互
 q = Queue(14)
 
 def redis_format(str):
@@ -76,7 +76,7 @@ def cmd(statement):
     statement += os.linesep
     p.stdin.write(statement.encode('utf8'))
     p.stdin.flush()
-    time.sleep(1)
+    time.sleep(0.5)
     return getback()
 
 
@@ -88,7 +88,7 @@ def chat1(msg):
 
 
 openai.api_key = "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"
-def chat(msg):
+def chat2(msg):
     messages = []
     messages.append({"role":"system","content":""})
     messages.append({"role":"user","content": msg})
@@ -98,6 +98,50 @@ def chat(msg):
     )
     reply = response["choices"][0]["message"]["content"]
     return reply
+
+# Post params
+params = {
+    'max_new_tokens': 200,
+    'do_sample': True,
+    'temperature': 0.5,
+    'top_p': 0.9,
+    'typical_p': 1,
+    'repetition_penalty': 1.05,
+    'top_k': 0,
+    'min_length': 0,
+    'no_repeat_ngram_size': 0,
+    'num_beams': 1,
+    'penalty_alpha': 0,
+    'length_penalty': 1,
+    'early_stopping': False,
+}
+# Server address
+server = "127.0.0.1"
+def chat(msg):
+    #print(msg)
+    response = requests.post(f"http://{server}:7860/run/textgen", json={
+        "data": [
+            msg,
+            params['max_new_tokens'],
+            params['do_sample'],
+            params['temperature'],
+            params['top_p'],
+            params['typical_p'],
+            params['repetition_penalty'],
+            params['top_k'],
+            params['min_length'],
+            params['no_repeat_ngram_size'],
+            params['num_beams'],
+            params['penalty_alpha'],
+            params['length_penalty'],
+            params['early_stopping'],
+        ]
+    }).json()
+    data = response['data'][0]
+    print(data)
+    reply = data.split("\n")
+    return reply[0] + "\n" + reply[1]
+
 
 
 # 通过 redis 回送消息

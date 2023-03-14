@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,11 +23,11 @@ public class ShadowController {
         //System.out.println(rabbitMQUtil.getClass());
         String account = (String) params.get("account");
         String command = (String) params.get("command");
-//        System.out.println(account + ":" + command);
+        int timeout = Integer.parseInt((String) params.get("timeout"));
+//        System.out.println(timeout);
         Map<String, Object> result = new HashMap<>();
         try{
-            String back = aidesService.sendCommandAndGetBack(account, command);
-//            System.out.println(back);
+            List<String> back = aidesService.sendCommandAndGetBack(account, command, timeout);
             result.put("data", back);
             return result;
         }catch (Exception e){

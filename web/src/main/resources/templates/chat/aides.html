@@ -43,6 +43,16 @@
 							<ul class="actions">
 								<li><button onclick="commanding()" class="primary">Send</button></li>
 								<li><button onclick="cls()">Clear</button></li>
+								<li>
+									<select id="timeout">
+										<option value="7">设置消息超时时间，默认7s</option>
+										<option value="4">设置消息超时时间，当前4s</option>
+										<option value="9">设置消息超时时间，当前9s</option>
+										<option value="12">设置消息超时时间，当前12s</option>
+										<option value="44">设置消息超时时间，当前44s</option>
+										<option value="240">设置消息超时时间，当前4m</option>
+									</select>
+								</li>
 							</ul>
 						</section>
 						<a onclick="clean()">Clean the Message Queue</a>
@@ -104,16 +114,21 @@
 				function commanding(){
 					let a = sessionStorage.getItem("user").toString();
 					let c = document.getElementById("text").value;
+					let t = document.getElementById("timeout").value;
+					//console.log(t)
 					setMessageInnerHTML(a, c)
 					document.getElementById("text").value = ""
 					$.ajax({
 						url: "/commanding",
 						type: "post",
-						data: JSON.stringify({account:a, command:c}),
+						data: JSON.stringify({account:a, command:c, timeout:t}),
 						dataType: "json",
 						contentType: "application/json",
 						success: function (result){
-							setMessageInnerHTML("Shadow", result.data)
+							console.log(result.data)
+							for(let i in result.data){
+								setMessageInnerHTML("shadow", result.data[i])
+							}
 						}
 					});
 				}

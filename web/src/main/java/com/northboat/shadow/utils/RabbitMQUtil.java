@@ -22,9 +22,6 @@ public class RabbitMQUtil {
         factory.setUsername("guest");
         // 密码
         factory.setPassword("guest");
-        factory.setHost("127.0.0.1");
-        factory.setUsername("guest");
-        factory.setPassword("guest");
     }
 
     public boolean send (String queueName, String command) {
@@ -66,6 +63,8 @@ public class RabbitMQUtil {
             // 创建一个信道
             Channel channel = connection.createChannel();
             channel.queuePurge(name);
+            channel.close();
+            connection.close();
             return true;
         } catch (Exception e){
             e.printStackTrace();

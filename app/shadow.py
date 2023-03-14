@@ -140,15 +140,14 @@ def chat(msg):
     data = response['data'][0]
     print(data)
     reply = data.split("\n")
-    return reply[0] + "\n" + reply[1]
-
+    return reply[1]
 
 
 # 通过 redis 回送消息
 def send_back(msg):
     # 从池子中拿一个链接
     conn = redis.Redis(connection_pool=pool, decode_responses=True)
-    conn.set(name, msg);
+    conn.rpush(name, msg)
     conn.close()
 
 def log(content):
@@ -202,7 +201,7 @@ def shadow():
             else:
                 result = cmd(command[1:])
         else:
-            result = chat(command)
+            result = chat(command).strip()
     
         print("处理结果: ", result)
         # 返回结果

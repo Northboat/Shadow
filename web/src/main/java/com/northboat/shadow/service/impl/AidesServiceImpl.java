@@ -9,6 +9,8 @@ import com.northboat.shadow.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -34,44 +36,55 @@ public class AidesServiceImpl implements AidesService {
     }
 
     @Override
-    public String sendCommandAndGetBack(String account, String command){
+    public List<String> sendCommandAndGetBack(String account, String command, int timeout){
         User user = StringUtil.containAt(account) ? userMapper.queryByEmail(account) : userMapper.queryByName(account);
+        List<String> res = new ArrayList<>();
         if(Objects.isNull(user)){
-            return "请先注册";
+            res.add("请先注册");
+            return res;
         }
-        redisUtil.set(user.getName(), "null");
         if(!rabbitMQUtil.send(user.getName(), command)){
-            return "消息发送失败";
+            res.add("消息发送失败");
+            return res;
         }
         long begin = System.currentTimeMillis();
-        while(Objects.isNull(redisUtil.get(user.getName())) || redisUtil.get(user.getName()).equals("null")){
+        int size = Objects.isNull(redisUtil.lget(user.getName())) ? 0 : redisUtil.lget(user.getName()).size();
+        while(Objects.isNull(redisUtil.lget(user.getName())) || redisUtil.lget(user.getName()).size() == size){
             long cur = System.currentTimeMillis();
             long used = (cur-begin) / 1000;
-            if(used > 9){
-                return "连接超时";
+            if(used > timeout){
+                res.add("连接超时");
+                return res;
             }
         }
-        String back = (String) redisUtil.get(user.getName());
-        redisUtil.set(user.getName(), "null");
-        return back;
+        List l = redisUtil.lget(user.getName());
+        for (Object o : l) {
+            String s = (String) o;
+            res.add(s);
+        }
+        redisUtil.ldel(user.getName());
+        return res;
     }
 
     @Override
     public String login(String account, String password){
         User user = StringUtil.containAt(account) ? userMapper.queryByEmail(account) : userMapper.queryByName(account);
-        redisUtil.set(user.getName(), "null");
+        redisUtil.ldel(user.getName());
         if(!rabbitMQUtil.send(user.getName(), "/login " + password)){
             return "fail";
         }
         long begin = System.currentTimeMillis();
-        while(Objects.isNull(redisUtil.get(user.getName())) || redisUtil.get(user.getName()).equals("null")){
+        while(Objects.isNull(redisUtil.lget(user.getName())) || redisUtil.lget(user.getName()).size() == 0){
             long cur = System.currentTimeMillis();
             long used = (cur-begin) / 1000;
             if(used > 9){
                 return "timeout";
             }
         }
-        return (String) redisUtil.get(user.getName());
+        String res = (String) redisUtil.lpop(user.getName());
+//        System.out.println("nmsl");
+//        System.out.println(res);
+        return res;
     }
 
     @Override

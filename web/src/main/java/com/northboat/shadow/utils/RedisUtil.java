@@ -196,8 +196,39 @@ public class RedisUtil {
         }
     }
 
+    // 弹出list第一个元素
+    public Object lpop(String key){
+        try{
+            return key == null ? null : myRedisTemplate.opsForList().leftPop(key);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 弹出list最后一个元素
+    public Object rpop(String key){
+        try{
+            return key == null ? null : myRedisTemplate.opsForList().rightPop(key);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 删除list所有元素
+    public boolean ldel(String key){
+        try{
+            myRedisTemplate.opsForList().trim(key, 1, 0);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     // 从list最右边开始检索val
-    public boolean lrdel(String key, String val){
+    public boolean lrget(String key, String val){
         try{
             myRedisTemplate.opsForList().remove(key, -1, val);
             return true;

@@ -9,7 +9,7 @@ import openai
 
 
 # redis 连接池
-pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True, max_connections=4)   # host是redis主机，需要redis服务端和客户端都起着 redis默认端口是6379
+pool = redis.ConnectionPool(host='43.163.218.127', port=6379, decode_responses=True, max_connections=4, password='123456')   # host是redis主机，需要redis服务端和客户端都起着 redis默认端口是6379
 # 获取队列名（从 .conf 中）
 path = "./"
 name = ""
@@ -31,32 +31,34 @@ with open(path+"shadow.conf", 'r') as f:
 q = Queue(14)
 
 def redis_format(str):
-    return '\"' + str + '\"'
+    return f'\"{str}\"'
 
 
+
+# 命令行
 p = subprocess.Popen("/bin/bash", shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 def stdout():
     global p
     while True:
-        setback(p.stdout.readline().decode('utf8').strip() + " ")
+        setback(p.stdout.readline().decode('utf8'))
 
 def stderr():
     global p
     while True:
-        setback(p.stderr.readline().decode('utf8').strip() + " ")
+        setback(p.stderr.readline().decode('utf8'))
 
-cmd_back = ""
+cmd_back = f""
 
 def setback(str):
     global cmd_back
     global back_finished
-    cmd_back += str
+    cmd_back += str.strip()+"\n"
 
 def getback():
     global cmd_back
     global back_finished
     result = cmd_back
-    cmd_back = ""
+    cmd_back = f""
     return result.strip()
 
 import threading
@@ -77,7 +79,12 @@ def cmd(statement):
     p.stdin.write(statement.encode('utf8'))
     p.stdin.flush()
     time.sleep(0.5)
-    return getback()
+    return getback().replace("\n", "<br>")
+
+
+
+
+
 
 
 # 聊天机器人
@@ -86,7 +93,7 @@ def chat1(msg):
     html = requests.get(url)
     return html.json()["content"]
 
-
+# chatGPT API
 openai.api_key = "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"
 def chat2(msg):
     messages = []
@@ -99,7 +106,7 @@ def chat2(msg):
     reply = response["choices"][0]["message"]["content"]
     return reply
 
-# Post params
+# 本地模型
 params = {
     'max_new_tokens': 200,
     'do_sample': True,
@@ -140,7 +147,8 @@ def chat(msg):
     data = response['data'][0]
     print(data)
     reply = data.split("\n")
-    return reply[1]
+    return reply[0] + reply[1]
+
 
 
 # 通过 redis 回送消息
@@ -168,14 +176,14 @@ def get_history():
     i = q.qsize()
     history = ""
     for j in range(0, i):
-        history += str(q.queue[j]) + "<br>"
+        history += str(q.queue[j])
     return history
 
 
 def login(p):
     if(pwd == p):
-        return "yes"
-    return "no"
+        return f"yes"
+    return f"no"
 
 
 
@@ -194,24 +202,23 @@ def shadow():
         # 处理命令并获取结果
         if command[0] == '/':
             if command[1:]  == "cache":
-                # print("进来了")
                 result = get_history()
             elif command[1:].split(" ")[0] == "login":
                 result = login(command[1:].split(" ")[1].strip())
             else:
                 result = cmd(command[1:])
         else:
-            result = chat(command).strip()
+            result = chat(command).strip().replace("\n", "<br>")
     
-        print("处理结果: ", result)
+        print("处理结果: " + result)
         # 返回结果
         send_back(redis_format(result))
         # 记录缓存
         cache(command, result)
 
     # mq建立连接
-    userx = pika.PlainCredentials("guest","guest")
-    conn = pika.BlockingConnection(pika.ConnectionParameters("127.0.0.0",5672,'/',credentials=userx))
+    userx = pika.PlainCredentials("admin","011026")
+    conn = pika.BlockingConnection(pika.ConnectionParameters("43.163.218.127",5672,'/',credentials=userx))
     # 开辟管道
     channelx = conn.channel()
     #声明队列，参数为队列名

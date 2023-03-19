@@ -8,6 +8,8 @@ from PyQt5 import QtCore
 import pymysql
 import threading
 
+import requests
+import json
 
 path = "./"
 
@@ -62,6 +64,8 @@ class MainDialog(QDialog):
 
 
 
+
+
 class LoginDialog(QDialog):
 
     switch_window = QtCore.pyqtSignal()
@@ -73,8 +77,25 @@ class LoginDialog(QDialog):
         self.ui.setupUi(self)
 
 
+    # 调用后端接口登录判断
     def verily(self, name, email):
-        conn = pymysql.connect(host = '127.0.0.1' # 连接名称，默认127.0.0.1
+        url = "http://43.163.218.127:8080/localVerify"
+        headers =  {"Content-Type":"application/json"}
+        data = json.dumps({"name":name, "email":email})
+        response = requests.post(url=url, headers=headers, data=data)
+        result  = response.text
+        # print(result)
+        if result == "yes":
+            return True
+        else:
+            if result == "no": print("用户不存在")
+            if result == "nothingness": print("昵称邮箱不匹配")
+            return False
+            
+
+    # 直连 mysql
+    def verily1(self, name, email):
+        conn = pymysql.connect(host = '43.163.218.127' # 连接名称，默认127.0.0.1
             ,user = 'root' # 用户名
             ,passwd='011026' # 密码
             ,port= 3306 # 端口，默认为3306

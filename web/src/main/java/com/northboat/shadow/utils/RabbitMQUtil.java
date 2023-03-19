@@ -19,9 +19,9 @@ public class RabbitMQUtil {
         // 工厂IP，连接RabbitMQ的队列
         factory.setHost("127.0.0.1");
         // 用户名
-        factory.setUsername("guest");
+        factory.setUsername("admin");
         // 密码
-        factory.setPassword("guest");
+        factory.setPassword("011026");
     }
 
     public boolean send (String queueName, String command) {

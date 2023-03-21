@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
             // 在线状态
             userMapper.login(name);
             redisUtil.del(user.getEmail());
-            return userMapper.queryByName(user.getName()).getOnline();
+            return 1;
         }
         return -1;
     }

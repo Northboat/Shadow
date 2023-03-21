@@ -113,10 +113,12 @@ public class UserController {
             return "user/verify";
         }
         System.out.println(account + "登录成功");
+        User user = userService.getUser(account);
         // 登录成功
-        session.setAttribute("login", online);
-        model.addAttribute("login", online);
-        model.addAttribute("user", userService.getUser(account).getName());
+        session.setAttribute("login", user.getOnline());
+        session.setAttribute("name", user.getName());
+        model.addAttribute("login", 1);
+        model.addAttribute("user", user.getName());
         return "user/login";
     }
 

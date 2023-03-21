@@ -36,13 +36,13 @@ public class ChatController {
     @RequestMapping("/aides")
     public String aides(HttpSession session, Model model){
         // 去除注释开启登录验证
-        String account = (String) session.getAttribute("user");
+        String name = (String) session.getAttribute("user");
         Integer login = (Integer) session.getAttribute("login");
-        if(Objects.isNull(account) || login == 0){
+        if(Objects.isNull(name) || login == 0){
             model.addAttribute("msg", "请先登录");
             return "user/login";
         }
-        User user = userService.getUser(account);
+        User user = userService.getUser(name);
         if(Objects.isNull(user)){
             model.addAttribute("msg", "请先注册");
             return "user/login";

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -73,7 +72,7 @@ public class UserController {
         Integer login = (Integer) session.getAttribute("login");
         if(!Objects.isNull(login)){
             String user = (String) session.getAttribute("user");
-            model.addAttribute("login", 1);
+            model.addAttribute("login", login);
             model.addAttribute("user", user);
         }
         return "user/login";
@@ -117,7 +116,7 @@ public class UserController {
         // 登录成功
         session.setAttribute("login", user.getOnline());
         session.setAttribute("name", user.getName());
-        model.addAttribute("login", 1);
+        model.addAttribute("login", user.getOnline());
         model.addAttribute("user", user.getName());
         return "user/login";
     }
@@ -139,7 +138,7 @@ public class UserController {
             model.addAttribute("msg", "昵称已被使用或含有字符@");
             return "user/register";
         }
-        session.setAttribute("login", 1);
+        session.setAttribute("login", 1); // 刚注册肯定是 1
         session.setAttribute("user", name);
         model.addAttribute("login", 1);
         model.addAttribute("user", name);

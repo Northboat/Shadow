@@ -41,7 +41,7 @@
 						</section>
 
 
-						<section style="width: 540px" th:if="${not #strings.isEmpty(login)} and ${login} ne 0">
+						<section th:if="${not #strings.isEmpty(login)} and ${login} ne 0">
 							<h3 style="display: inline">你好，</h3>
 							<strong id="user" th:text="${user}"></strong><br><br>
 							<ul class="actions">

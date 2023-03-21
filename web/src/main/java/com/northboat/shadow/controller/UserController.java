@@ -115,7 +115,7 @@ public class UserController {
         User user = userService.getUser(account);
         // 登录成功
         session.setAttribute("login", user.getOnline());
-        session.setAttribute("name", user.getName());
+        session.setAttribute("user", user.getName());
         model.addAttribute("login", user.getOnline());
         model.addAttribute("user", user.getName());
         return "user/login";

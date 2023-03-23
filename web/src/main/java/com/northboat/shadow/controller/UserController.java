@@ -45,6 +45,7 @@ public class UserController {
         //System.out.println(account + ":" + pwd);
         try{
             String back = aidesService.login(user.getName(), pwd);
+            //System.out.println(back);
             switch (back) {
                 case "yes" -> {
                     //System.out.println(account + "登录成功");
@@ -163,19 +164,27 @@ public class UserController {
     }
 
     @ResponseBody
-    @RequestMapping("/localVerify")
-    public String localVerify(@RequestBody Map<String, Object> params){
+    @RequestMapping("/sendBack")
+    public String sendBack(@RequestBody Map<String, Object> params){
         String name = (String) params.get("name");
-        String email = (String) params.get("email");
-
-//        System.out.println(name + " " + email);
-        User user = userService.getUser(name);
-        if(Objects.isNull(user)){
-            return "nothingness";
-        }
-        if(user.getEmail().equals(email)){
-            return "yes";
-        }
-        return "no";
+        String back = (String) params.get("back");
+        System.out.println(name + " " + back);
+        return userService.sendBack(name, back);
     }
+//    @ResponseBody
+//    @RequestMapping("/localVerify")
+//    public String localVerify(@RequestBody Map<String, Object> params){
+//        String name = (String) params.get("name");
+//        String email = (String) params.get("email");
+//
+////        System.out.println(name + " " + email);
+//        User user = userService.getUser(name);
+//        if(Objects.isNull(user)){
+//            return "nothingness";
+//        }
+//        if(user.getEmail().equals(email)){
+//            return "yes";
+//        }
+//        return "no";
+//    }
 }

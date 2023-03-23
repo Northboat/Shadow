@@ -139,4 +139,15 @@ public class UserServiceImpl implements UserService {
     public User getUser(String account){
         return StringUtil.containAt(account) ? userMapper.queryByEmail(account) : userMapper.queryByName(account);
     }
+
+    @Override
+    public String sendBack(String name, String msg){
+        try{
+            redisUtil.rpush(name, msg);
+            return "yes";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "no";
+        }
+    }
 }

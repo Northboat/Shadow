@@ -5,11 +5,11 @@ import window
 from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
-import pymysql
+# import pymysql
 import threading
 
-import requests
-import json
+
+import pymysql
 
 path = "./"
 
@@ -28,8 +28,8 @@ class Controller:
         self.window = MainDialog()
         self.window.switch_window.connect(self.shutdown)
         self.window.show()
-        import shadow;
-        self.p = threading.Thread(target=shadow.shadow)
+        from shadow import shadow;
+        self.p = threading.Thread(target=shadow)
         # 设置为守护进程，当父进程结束时，将被强制终止
         self.p.daemon = True
         self.p.start()
@@ -79,22 +79,6 @@ class LoginDialog(QDialog):
 
     # 调用后端接口登录判断
     def verily(self, name, email):
-        url = "http://43.163.218.127:8080/localVerify"
-        headers =  {"Content-Type":"application/json"}
-        data = json.dumps({"name":name, "email":email})
-        response = requests.post(url=url, headers=headers, data=data)
-        result  = response.text
-        # print(result)
-        if result == "yes":
-            return True
-        else:
-            if result == "no": print("用户不存在")
-            if result == "nothingness": print("昵称邮箱不匹配")
-            return False
-            
-
-    # 直连 mysql
-    def verily1(self, name, email):
         conn = pymysql.connect(host = '43.163.218.127' # 连接名称，默认127.0.0.1
             ,user = 'root' # 用户名
             ,passwd='011026' # 密码
@@ -103,39 +87,33 @@ class LoginDialog(QDialog):
             ,charset='utf8' # 字符编码
         )
         cur = conn.cursor() # 生成游标对象
-        sql="select * from `user` where `name`= " + '\'' + name + '\'' # SQL语句
+        sql = "select * from `user` where `name`= " + '\'' + name + '\'' # SQL语句
         #print(sql)
         cur.execute(sql) # 执行SQL语句
         data = cur.fetchall() # 通过fetchall方法获得数据
-        if len(data) == 0:
-            print("用户不存在")
-            cur.close() # 关闭游标
-            conn.close() # 关闭连接
+        cur.close()
+        conn.close()
+        if len(data) > 1 or len(data) == 0:
             return False
-        if data[0][1] != email:
-            print("昵称和邮箱不匹配")
-            cur.close() # 关闭游标
-            conn.close() # 关闭连接
+        elif data[0][1] != email:
             return False
-        #print("验证成功")
-        cur.close() # 关闭游标
-        conn.close() # 关闭连接
         return True
 
     
-    def write_conf(self, name, email, pwd):
+    def write_conf(self, name, email, pwd, mode):
         with open(path+"shadow.conf", 'w') as f:
             f.write("name: " + name + "\n")
             f.write("email: " + email + "\n")
             f.write("password: " + pwd + "\n")
+            f.write("mode: " + mode + "\n")
 
     def start(self):
         name = self.ui.name.text()
         email = self.ui.email.text()
         pwd = self.ui.pwd.text()
-        
+        mode = self.ui.mode.text()
         if self.verily(name, email):
-            self.write_conf(name, email, pwd)
+            self.write_conf(name, email, pwd, mode)
             # 跳转主页面
             self.switch_window.emit()
 

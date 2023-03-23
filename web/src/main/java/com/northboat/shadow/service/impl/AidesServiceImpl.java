@@ -6,12 +6,11 @@ import com.northboat.shadow.service.AidesService;
 import com.northboat.shadow.utils.RabbitMQUtil;
 import com.northboat.shadow.utils.RedisUtil;
 import com.northboat.shadow.utils.StringUtil;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Service
@@ -49,21 +48,28 @@ public class AidesServiceImpl implements AidesService {
         }
         long begin = System.currentTimeMillis();
         int size = Objects.isNull(redisUtil.lget(user.getName())) ? 0 : redisUtil.lget(user.getName()).size();
-        while(Objects.isNull(redisUtil.lget(user.getName())) || redisUtil.lget(user.getName()).size() == size){
-            long cur = System.currentTimeMillis();
-            long used = (cur-begin) / 1000;
-            if(used > timeout){
-                res.add("连接超时");
-                return res;
+        try{
+            while(Objects.isNull(redisUtil.lget(user.getName())) || redisUtil.lget(user.getName()).size() == size){
+                long cur = System.currentTimeMillis();
+                long used = (cur-begin) / 1000;
+                if(used > timeout){
+                    res.add("连接超时");
+                    return res;
+                }
             }
+            List l = redisUtil.lget(user.getName());
+            for (Object o : l) {
+                String s = (String) o;
+                res.add(s);
+            }
+            redisUtil.ldel(user.getName());
+            return res;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
-        List l = redisUtil.lget(user.getName());
-        for (Object o : l) {
-            String s = (String) o;
-            res.add(s);
-        }
-        redisUtil.ldel(user.getName());
-        return res;
+
+
     }
 
     @Override
@@ -74,22 +80,37 @@ public class AidesServiceImpl implements AidesService {
             return "fail";
         }
         long begin = System.currentTimeMillis();
-        while(Objects.isNull(redisUtil.lget(user.getName())) || redisUtil.lget(user.getName()).size() == 0){
-            long cur = System.currentTimeMillis();
-            long used = (cur-begin) / 1000;
-            if(used > 9){
-                return "timeout";
+        try{
+            while(Objects.isNull(redisUtil.lget(user.getName())) || redisUtil.lget(user.getName()).size() == 0){
+                long cur = System.currentTimeMillis();
+                long used = (cur-begin) / 1000;
+                if(used > 9){
+                    return "timeout";
+                }
             }
-        }
-        String res = (String) redisUtil.lpop(user.getName());
+            String res = (String) redisUtil.lpop(user.getName());
 //        System.out.println("nmsl");
 //        System.out.println(res);
-        return res;
+            return res;
+        }catch (Exception e){
+            e.printStackTrace();
+            return "fail";
+        }
+
     }
 
     @Override
-    public boolean clearMsg(String account){
+    public String clearMsg(String account){
         User user = StringUtil.containAt(account) ? userMapper.queryByEmail(account) : userMapper.queryByName(account);
-        return rabbitMQUtil.clear(user.getName());
+        try{
+            boolean flag = rabbitMQUtil.clear(user.getName());
+            if(flag){
+                return "清除成功";
+            }
+            return "清除失败";
+        }catch (Exception e){
+            return "发生异常";
+        }
+
     }
 }

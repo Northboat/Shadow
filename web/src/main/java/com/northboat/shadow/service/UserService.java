@@ -12,4 +12,6 @@ public interface UserService {
     public User getUser(String account);
     public int login(String name);
 
+    public String sendBack(String name, String msg);
+
 }

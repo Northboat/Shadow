@@ -7,5 +7,5 @@ public interface AidesService {
 
     public String login(String name, String password);
 
-    public boolean clearMsg(String account);
+    public String clearMsg(String account);
 }

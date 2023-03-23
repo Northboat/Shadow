@@ -24,17 +24,10 @@ public class ShadowController {
         String account = (String) params.get("account");
         String command = (String) params.get("command");
         int timeout = Integer.parseInt((String) params.get("timeout"));
-//        System.out.println(timeout);
         Map<String, Object> result = new HashMap<>();
-        try{
-            List<String> back = aidesService.sendCommandAndGetBack(account, command, timeout);
-            result.put("data", back);
-            return result;
-        }catch (Exception e){
-            e.printStackTrace();
-            result.put("data", "取值错误");
-            return result;
-        }
+        List<String> back = aidesService.sendCommandAndGetBack(account, command, timeout);
+        result.put("data", back);
+        return result;
     }
 
     @RequestMapping("/clean")
@@ -42,19 +35,9 @@ public class ShadowController {
         //System.out.println(rabbitMQUtil.getClass());
         String account = (String) params.get("account");
         Map<String, Object> result = new HashMap<>();
-        try{
-            boolean flag = aidesService.clearMsg(account);
-            if(flag){
-                result.put("data", "清除队列成功");
-            } else {
-                result.put("data", "清除队列失败");
-            }
-            return result;
-        }catch (Exception e){
-            e.printStackTrace();
-            result.put("data", "发生异常，清除队列失败");
-            return result;
-        }
+        String msg = aidesService.clearMsg(account);
+        result.put("data", msg);
+        return result;
     }
 
 }

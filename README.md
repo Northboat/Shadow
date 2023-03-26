@@ -1,1 +1,3 @@
 # Shadow
+
+基于ChatGLM的远程私人AI助手，使用RabbitMQ和Redis做消息中转，本地部署ChatGLM提供对话服务，Python多线程实现本地Shell

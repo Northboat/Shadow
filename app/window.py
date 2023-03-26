@@ -36,7 +36,7 @@ class Ui_Dialog_Main(object):
         self.appBox.setGeometry(QtCore.QRect(5, 7, 327, 247))
         self.appBox.setObjectName("appBox")
         self.appLabel = QtWidgets.QLabel(self.appBox)
-        self.appLabel.setGeometry(QtCore.QRect(95, 72, 200, 44))
+        self.appLabel.setGeometry(QtCore.QRect(79, 72, 200, 44))
         self.appLabel.setObjectName("appLabel")
 
         # self.textEdit = QtWidgets.QTextEdit(self.appBox)

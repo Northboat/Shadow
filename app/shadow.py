@@ -5,7 +5,7 @@ import requests
 import urllib
 from queue import Queue
 from datetime import datetime
-import openai
+#import openai
 import json
 from transformers import AutoTokenizer, AutoModel
 
@@ -44,17 +44,17 @@ def chat1(msg):
     return html.json()["content"]
 
 # chatGPT API
-openai.api_key = "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"
-def chat2(msg):
-    messages = []
-    messages.append({"role":"system","content":""})
-    messages.append({"role":"user","content": msg})
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=messages
-    )
-    reply = response["choices"][0]["message"]["content"]
-    return reply
+#openai.api_key = "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"
+#def chat2(msg):
+#    messages = []
+#    messages.append({"role":"system","content":""})
+#    messages.append({"role":"user","content": msg})
+#    response = openai.ChatCompletion.create(
+#        model="gpt-3.5-turbo",
+#        messages=messages
+#    )
+#    reply = response["choices"][0]["message"]["content"]
+#    return reply
 
 # Text-Generation
 params = {
@@ -108,16 +108,16 @@ def chat3(msg):
 
 
 # 命令行
-p = subprocess.Popen("/bin/bash", shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+p = subprocess.Popen("cmd", shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 def stdout():
     global p
     while True:
-        setback(p.stdout.readline().decode('utf8'))
+        setback(p.stdout.readline().decode('gbk'))
 
 def stderr():
     global p
     while True:
-        setback(p.stderr.readline().decode('utf8'))
+        setback(p.stderr.readline().decode('gbk'))
 
 cmd_back = f""
 singal = False
@@ -149,7 +149,7 @@ def cmd(statement):
     global p
     global back_finished
     statement += os.linesep
-    p.stdin.write(statement.encode('utf8'))
+    p.stdin.write(statement.encode('gbk'))
     p.stdin.flush()
     time.sleep(0.5)
     return getback().replace("\n", "<br>")
@@ -213,19 +213,19 @@ def login(p):
 def shadow():
 
     # ChatGLM
-    tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained("model/chatglm-6b", trust_remote_code=True)
     if mode == 1: # 完整GPU 模型
-        model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).half().cuda()
+        model = AutoModel.from_pretrained("model/chatglm-6b", trust_remote_code=True).half().cuda()
     elif mode == 2: # GPU 量化模型，按需修改，目前只支持 4 或 8 bit 量化
-        model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).half().quantize(4).cuda()
+        model = AutoModel.from_pretrained("model/chatglm-6b", trust_remote_code=True).half().quantize(4).cuda()
     elif mode == 3: # cpu 运行，约要 32G 内存
-        model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).float()
+        model = AutoModel.from_pretrained("model/chatglm-6b", trust_remote_code=True).float()
     elif mode == 4: # 量化 cpu 运行
-        model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).bfloat16()
+        model = AutoModel.from_pretrained("model/chatglm-6b", trust_remote_code=True).bfloat16()
     else: # 默认
-        model = AutoModel.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True).bfloat16()
+        model = AutoModel.from_pretrained("model/chatglm-6b", trust_remote_code=True).half().quantize(4).cuda()
     model = model.eval()
-
+    print("模型部署完成")
     # 统一消息处理函数，执行完成才说明接收完成，此时才可以接收下一条，串行
     def exec(v1, v2, v3, bodyx):
         history = []
